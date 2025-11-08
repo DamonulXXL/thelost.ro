@@ -11,18 +11,31 @@ Acest proiect conține infrastructura de bază pentru simularea unei benzinării
 - Plan de organizare a rafturilor și zonelor din minimarket.
 - Interfață de linie de comandă pentru a explora și opera benzinăria.
 
-## Utilizare
+## Descărcare și instalare
 
-1. Asigură-te că ai Python 3.10+ instalat.
-2. Instalează dependențele de testare opționale:
+1. **Clonează proiectul** folosind Git:
+
+   ```bash
+   git clone https://github.com/<utilizator>/<repo>.git peco-simulator
+   cd peco-simulator
+   ```
+
+   Înlocuiește `<utilizator>/<repo>` cu locația reală a repository-ului.
+
+2. **Creează un mediu virtual (opțional, dar recomandat)** și instalează dependențele de dezvoltare:
 
    ```bash
    python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements-dev.txt  # opțional, dacă este creat
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
+   pip install -r requirements-dev.txt
    ```
 
-3. Rulează simulatorul din linia de comandă:
+   Dependențele sunt minime (pytest pentru teste); simulatorul propriu-zis rulează doar cu Python standard.
+
+## Utilizare
+
+1. Asigură-te că ești în rădăcina proiectului și, dacă ai creat unul, mediu virtual este activ.
+2. Rulează simulatorul din linia de comandă:
 
    ```bash
    python -m peco_simulator.cli
@@ -30,7 +43,7 @@ Acest proiect conține infrastructura de bază pentru simularea unei benzinării
 
    Vei putea consulta descrierea locației, inventarul și poți genera restock-uri.
 
-4. Pentru a rula testele automate:
+3. Pentru a rula testele automate și a verifica integritatea simulatorului:
 
    ```bash
    pytest
