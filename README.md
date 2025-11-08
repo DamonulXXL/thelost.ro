@@ -1,68 +1,59 @@
-# P.E.C.O. – Benzinărie Horror Simulator
+# P.E.C.O. – Benzinărie Horror Simulator (Unity)
 
-Acest proiect conține infrastructura de bază pentru simularea unei benzinării izolate din Transilvania, România. Benzinăria poartă numele **P.E.C.O.** și se află pe un drum național pustiu, cu indicator rutier „Cluj-Napoca 50 KM”. Simulatorul acoperă managementul minimarketului, organizarea spațiului și operațiunile de alimentare cu combustibil, pregătind terenul pentru viitoare evenimente horror.
+Acest repository oferă implementarea de bază a simulatorului de benzinărie **P.E.C.O.** pentru Unity. Jocul este plasat pe un drum pustiu din Ardeal, la 50 KM de Cluj-Napoca, și include managementul minimarketului, al pompelor de combustibil și infrastructura pentru evenimente horror viitoare.
 
 ## Caracteristici
 
-- Context narativ complet al locației, inclusiv repere și atmosferă unică ardelenească.
-- Inventar pentru minimarket cu rafturi, produse tradiționale, cafea și gustări rapide.
-- Management al depozitului și al restock-ului printr-un calculator dedicat.
-- Pompă de combustibil cu calcul automat al taxelor.
-- Plan de organizare a rafturilor și zonelor din minimarket.
-- Interfață de linie de comandă pentru a explora și opera benzinăria.
+- **Context narativ**: ScriptableObject dedicat (`WorldDescriptor`) pentru a expune descrieri atmosferice și note de organizare în UI.
+- **Inventar modular**: Rafturi, sloturi și depozit pentru minimarket configurabile direct din Inspector.
+- **Calculator de restock**: Algoritm configurabil prin `RestockCalculator` pentru a planifica reaprovizionarea.
+- **Pompă de combustibil**: Gestionarea volumului disponibil, calculul costului total și refil al rezervoarelor.
+- **Manager central**: `PecoGasStationManager` conectează lumea, inventarul și pompele pregătind terenul pentru logica horror ulterioară.
+- **HUD minimal**: Script pentru a afișa în UI informațiile despre locație și rapoartele de restock.
 
-## Descărcare și instalare
+## Structura Unity
 
-1. **Clonează proiectul** folosind Git:
+```
+unity/PECOHorrorSimulator/
+└── Assets/
+    └── Scripts/
+        ├── GasStation/
+        │   ├── FuelPump.cs
+        │   ├── GameLoopController.cs
+        │   ├── PecoGasStationManager.cs
+        │   ├── Inventory/
+        │   │   ├── InventoryItemDefinition.cs
+        │   │   ├── InventoryManager.cs
+        │   │   ├── InventoryShelf.cs
+        │   │   └── InventorySlot.cs
+        │   ├── Restock/
+        │   │   └── RestockCalculator.cs
+        │   └── World/
+        │       └── WorldDescriptor.cs
+        └── UI/
+            └── GasStationHud.cs
+```
 
-   ```bash
-   git clone https://github.com/<utilizator>/<repo>.git peco-simulator
-   cd peco-simulator
-   ```
+Toate scripturile sunt scrise în C# și pot fi atașate obiectelor din Unity pentru a configura simularea.
 
-   Înlocuiește `<utilizator>/<repo>` cu locația reală a repository-ului.
+## Cum rulezi proiectul în Unity
 
-2. **Creează un mediu virtual (opțional, dar recomandat)** și instalează dependențele de dezvoltare:
+1. **Creează un proiect 3D în Unity** (Unity 2021.3 LTS sau mai nou recomandat).
+2. Copiază folderul `Assets` din `unity/PECOHorrorSimulator` în proiectul tău nou sau importă-l prin Unity Package Manager ca pachet local.
+3. În scenă:
+   - Creează un GameObject gol numit `P.E.C.O. Station` și atașează `PecoGasStationManager`.
+   - Adaugă componente `FuelPump`, `InventoryManager`, `InventoryShelf` și configurează `InventorySlot`-urile cu `InventoryItemDefinition` ScriptableObjects (creează-le din meniu: **Create → Peco → Inventory Item**).
+   - Creează un `WorldDescriptor` (**Create → Peco → World Descriptor**) și setează descrierile locației.
+   - Adaugă un Canvas cu componente TextMeshPro și atașează `GasStationHud` pentru a afișa informațiile.
+   - Atașează `GameLoopController` pe un GameObject din scenă pentru a simula turele și verificările de restock.
+4. Rulează scena în Play Mode. Vei putea declanșa restock manual din inspector (butonul `GenerateRestockPlan` via context menu sau apelând din alte scripturi) și vei vedea rapoartele actualizate în HUD.
 
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   pip install -r requirements-dev.txt
-   ```
+## Extensii recomandate
 
-   Dependențele sunt minime (pytest pentru teste); simulatorul propriu-zis rulează doar cu Python standard.
+- Integrarea unui sistem de evenimente horror (lumini care se sting, NPC-uri misterioase) conectat la `GameLoopController`.
+- UI suplimentar pentru gestionarea vânzărilor, a taxării combustibilului și a depozitului.
+- Salvarea progresului între ture și un sistem de economie (profit/pierderi).
 
-## Utilizare
+## Licență
 
-1. Asigură-te că ești în rădăcina proiectului și, dacă ai creat unul, mediu virtual este activ.
-2. Rulează simulatorul din linia de comandă:
-
-   ```bash
-   python -m peco_simulator.cli
-   ```
-
-   Vei putea consulta descrierea locației, inventarul și poți genera restock-uri.
-
-3. Pentru a rula testele automate și a verifica integritatea simulatorului:
-
-   ```bash
-   pytest
-   ```
-
-## Structura proiectului
-
-- `peco_simulator/world.py` – contextul și descrierea lumii.
-- `peco_simulator/inventory.py` – gestionarea obiectelor din minimarket.
-- `peco_simulator/restock.py` – logica pentru calculatorul de restock.
-- `peco_simulator/gas_station.py` – logica principală a benzinăriei, depozit și pompe.
-- `peco_simulator/cli.py` – interfața de linie de comandă.
-- `tests/` – teste unitare pentru funcționalitate cheie.
-
-## Direcții viitoare
-
-- Evenimente horror dinamice și sistem de noapte.
-- Interacțiuni cu NPC-uri și clienți misterioși.
-- Extinderea depozitului și gestionarea furnizorilor.
-- Integrarea unor mini-jocuri pentru securitate și supraviețuire.
-
-Acest punct de plecare oferă structura necesară pentru a continua dezvoltarea experienței horror în jurul benzinăriei P.E.C.O.
+Poți folosi codul ca punct de pornire pentru jocul tău P.E.C.O. în Unity. Ajustează și extinde după nevoile proiectului.
